@@ -1,0 +1,45 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('jobs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('owner_id')->constrained('owners')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('nama_usaha');
+            $table->string('bidang_usaha');
+            $table->string('jenis_usaha');
+            $table->string('nib_oss', 15);
+            $table->string('no_pendataan_umkm', 20);
+            $table->string('alamat_usaha');
+            $table->string('kelurahan_usaha');
+            $table->string('kecamatan_usaha');
+            $table->string('cakupan_wilayah_pemasaran');
+            $table->string('jenis_pemasaran');
+            $table->string('izin_usaha');
+            $table->string('permodalan_usaha');
+            $table->string('permasalahan_usaha');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('jobs');
+    }
+};

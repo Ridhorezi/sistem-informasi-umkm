@@ -1,0 +1,15 @@
+.text-login {
+    position: absolute;
+    font-weight: bold;
+    width: 147px;
+    height: 60px;
+    left: 647px;
+    top: 204px;
+}
+
+.navbar-title {
+    color: white;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+}

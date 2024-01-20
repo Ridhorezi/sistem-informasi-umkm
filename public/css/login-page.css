@@ -1,0 +1,12 @@
+.navbar {
+    background: rgba(255, 165, 0, 0.8);
+}
+
+/* .navbar .container-fluid a {
+    margin-left: ;
+} */
+
+.navbar .container-fluid a p {
+    font-weight: bold;
+    font-size: 14px;
+}

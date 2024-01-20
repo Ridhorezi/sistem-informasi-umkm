@@ -1,0 +1,58 @@
+.sidebar {
+    position: absolute;
+    width: 315px;
+    background: #A4A6B9;
+    height: 802px;
+}
+
+.sidebar .r-1 {
+    position: absolute;
+    top: 47px;
+    left: 40px;
+    display: flex;
+}
+
+.sidebar .text-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .text-container p {
+    margin: 0;
+}
+
+.sidebar .r-1 img {
+    width: 50px;
+    height: 50px;
+    margin-right: 9px;
+}
+
+.sidebar .r-1 #text-1 {
+    text-align: start;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 30px;
+
+    color: #000000;
+
+}
+
+.sidebar .r-1 #text-2 {
+    text-align: start;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    
+
+    color: #000000;
+
+}
+
+.sidebar .sidebar-menu {
+    position: absolute;
+    top: 153px;
+    left: 40px;
+}
