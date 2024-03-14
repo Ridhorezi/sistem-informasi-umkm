@@ -6,7 +6,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Usaha;
 use App\Models\Pemilik;
-use App\Models\Pelatihan;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,23 +16,39 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
+
     public function run()
     {
-        User::factory()->create([
-            'name' => 'Admin Dinkop',
-            'email' => 'adminkop@gmail.com',
-            'password' => '$2a$12$Od/u8JgV3OqrosaGC2CAaOWsn6AjI.fK.lyNSJaV4V1kdIEHVvI5i'
+        // call business type seeder
+        $this->call([
+            BusinessTypeSeeder::class,
         ]);
-        // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+         // call Owners Jobs seeder
+         $this->call([
+            OwnersJobsSeeder::class,
+        ]);
 
-        //User::factory(3)->create();
-        
-        // Pemilik::factory(20)->create();
-        // Usaha::factory(20)->create();
+        // create role 'admin'
+        $adminRole = Role::create(['name' => 'admin']);
+
+        // create role 'pimpinan'
+        $pimpinanRole = Role::create(['name' => 'pimpinan']);
+
+        // create user role 'admin'
+        User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'adminrbc@gmail.com',
+            'password' => '$2a$10$T.KIImd8JsLW2tKQTyDdTOrOOvQrk0LsuOfdmBFmDDWG9zP6Z9JCW',
+            'role_id' => $adminRole->id,
+        ]);
+
+        // create user role 'pimpinan'
+        User::factory()->create([
+            'name' => 'Pimpinan',
+            'email' => 'pimpinanrbc@gmail.com',
+            'password' => '$2a$10$T.KIImd8JsLW2tKQTyDdTOrOOvQrk0LsuOfdmBFmDDWG9zP6Z9JCW',
+            'role_id' => $pimpinanRole->id,
+        ]);
     }
 }

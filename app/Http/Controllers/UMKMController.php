@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fund;
 use App\Models\UMKM;
-use App\Models\Asset;
 use App\Models\Usaha;
-use App\Models\Worker;
 use App\Helpers\Helper;
 use App\Models\Pemilik;
-use App\Models\Pelatihan;
+use App\Models\BusinessType;
 use Illuminate\Http\Request;
 use App\Exports\DataTableExport;
-use App\Models\CapacityProduction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -35,7 +31,9 @@ class UMKMController extends Controller
 
     public function registrasi()
     {
-        return view('umkm.registrasi')->with('active', 'pendaftaran');
+        $jenis_usahas = BusinessType::all();
+
+        return view('umkm.registrasi', compact('jenis_usahas'))->with('active', 'pendaftaran');
     }
 
     public function contact()
@@ -55,7 +53,9 @@ class UMKMController extends Controller
      */
     public function create()
     {
-        return view('admin.data-umkm.tambah-data-umkm')->with('user', Auth::user());
+        $jenis_usahas = BusinessType::all();
+
+        return view('admin.data-umkm.tambah-data-umkm', compact('jenis_usahas'))->with('user', Auth::user());
     }
 
     /**
@@ -70,54 +70,24 @@ class UMKMController extends Controller
 
             //Data Pemilik
             'nama_pemilik' => 'required',
-            'sosial_media' => 'required',
-            'no_telepon' => 'required',
-            'kelurahan_pemilik' => 'required',
-            'kecamatan_pemilik' => 'required',
-            'email' => 'required',
-            'pendidikan_terakhir' => 'required',
+            'jenis_kelamin' => 'required',
             'alamat_pemilik' => 'required',
+            'kota_pemilik' => 'required',
 
             //Data Usaha
             'nama_usaha' => 'required',
-            'bidang_usaha' => 'required',
-            'jenis_usaha' => 'required',
-            'izin_usaha' => 'required',
-            'alamat_usaha' => 'required',
-            'kelurahan_usaha' => 'required',
-            'kecamatan_usaha' => 'required',
-            'nib' => 'required',
-            'no_pendataan_umkm' => 'required',
-            'permodalan_usaha' => 'required',
-            'cakupan_wilayah_pemasaran' => 'required',
-            'jenis_pemasaran' => 'required',
-            'permasalahan_usaha' => 'required',
-
-            //Aset
-            'aset' => 'required',
-            'tahun_aset' => 'required',
-
-            //Modal
-            'omset' => 'required',
-            'tahun_omset' => 'required',
-
-            //Tenaga Kerja
-            'tenaga_kerja' => 'required',
-            'tahun_tenaga_kerja' => 'required',
-
-            //Kapasitas Produksi
-            'kapasitas_produksi' => 'required',
-            'tahun_kapasitas_produksi' => 'required',
-
-            //Data Pelatihan
-            'pengalaman_pelatihan' => 'required',
-            'usulan_pelatihan' => 'required'
+            'jenis_usaha_id'  => 'required',
+            'lama_berdirinya_usaha' => 'required',
+            'nilai_pendanaan' => 'required',
+            'sumber_pendanaan' => 'required',
+            'hambatan_usaha' => 'required',
         ]);
 
         //Data Pemilik
         $pemilik = new Pemilik();
 
         $dataPemilik = Helper::checkTable($pemilik);
+
         $id_pemilik = Helper::getLastIdFromTable($pemilik);
 
         if (is_null($dataPemilik)) {
@@ -126,19 +96,26 @@ class UMKMController extends Controller
 
         $pemilik->id = $id_pemilik;
         $pemilik->nama_pemilik = $request->input('nama_pemilik');
+        $pemilik->jenis_kelamin = $request->input('jenis_kelamin');
         $pemilik->alamat_pemilik = $request->input('alamat_pemilik');
-        $pemilik->kelurahan_pemilik = $request->input('kelurahan_pemilik');
-        $pemilik->kecamatan_pemilik = $request->input('kecamatan_pemilik');
-        $pemilik->no_telepon = $request->input('no_telepon');
-        $pemilik->email = $request->input('email');
-        $pemilik->sosial_media = $request->input('sosial_media');
-        $pemilik->pendidikan_terakhir = $request->input('pendidikan_terakhir');
+        $pemilik->kota_pemilik = $request->input('kota_pemilik');
 
+         //Data Jenis Usaha
+         $jenis_usaha = new BusinessType();
+
+         $jenisUsaha = Helper::checkTable($jenis_usaha);
+
+         $id_jenis_usaha = Helper::getLastIdFromTable($jenis_usaha);
+
+         if (is_null($jenisUsaha)) {
+             $jenis_usaha->id = 1;
+         }
 
         //Data Usaha
         $usaha = new Usaha();
 
         $data_usaha = Helper::checkTable($usaha);
+
         $id_usaha = Helper::getLastIdFromTable($usaha);
 
         if (is_null($data_usaha)) {
@@ -148,116 +125,15 @@ class UMKMController extends Controller
         $usaha->id = $id_usaha;
         $usaha->owner_id = $id_pemilik;
         $usaha->nama_usaha = $request->input('nama_usaha');
-        $usaha->bidang_usaha = $request->input('bidang_usaha');
-        $usaha->jenis_usaha = $request->input('jenis_usaha');
-        $usaha->nib_oss = $request->input('nib');
-        $usaha->no_pendataan_umkm  = $request->input('no_pendataan_umkm');
-        $usaha->alamat_usaha  = $request->input('alamat_usaha');
-        $usaha->kelurahan_usaha = $request->input('kelurahan_usaha');
-        $usaha->kecamatan_usaha = $request->input('kecamatan_usaha');
-        $usaha->cakupan_wilayah_pemasaran = $request->input('cakupan_wilayah_pemasaran');
-        $usaha->jenis_pemasaran = $request->input('jenis_pemasaran');
-        $usaha->izin_usaha = $request->input('izin_usaha');
-        $usaha->permodalan_usaha = $request->input('permodalan_usaha');
-        $usaha->permasalahan_usaha = $request->input('permasalahan_usaha');
-
-
-        //Data Pelatihan
-        $pelatihan = new Pelatihan();
-        $pelatihan->owner_id = $id_pemilik;
-        $pelatihan->pengalaman_pelatihan = $request->input('pengalaman_pelatihan');
-        $pelatihan->usulan_pelatihan = $request->input('usulan_pelatihan');
-
-
-
-        // Data Asset
-        $asset = new Asset();
-        $jumlah_aset = $request->input('aset');
-        $tahun_aset = $request->input('tahun_aset');
-        $data_asset = [];
-        $timestamp = now();
-
-        foreach ($jumlah_aset as $index => $aset) {
-            $tahun = $tahun_aset[$index];
-
-            $data_asset[] = [
-                'jobs_id' => $id_usaha,
-                'jumlah_asset' => $aset,
-                'tahun' => $tahun,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ];
-        }
-
-
-
-        //Data Omset
-        $omset = new Fund();
-        $jumlah_omset = $request->input('omset');
-        $tahun_omset = $request->input('tahun_omset');
-        $data_omset = [];
-
-        foreach ($jumlah_omset as $index => $omset) {
-            $tahun = $tahun_omset[$index];
-
-            $data_omset[] = [
-                'jobs_id' => $id_usaha,
-                'jumlah_modal' => $omset,
-                'tahun' => $tahun,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ];
-        }
-
-
-
-        //Data Kapasitas Produksi
-        $kapasitas_produksi = new CapacityProduction();
-        $jumlah_kapasitas_produksi = $request->input('kapasitas_produksi');
-        $tahun_kapasitas_produksi = $request->input('tahun_kapasitas_produksi');
-        $data_kapasitas_produksi = [];
-
-        foreach ($jumlah_kapasitas_produksi as $index => $kproduk) {
-            $tahun = $tahun_kapasitas_produksi[$index];
-
-            $data_kapasitas_produksi[] = [
-                'jobs_id' => $id_usaha,
-                'jumlah_kapasitas_produksi' => $kproduk,
-                'tahun' => $tahun,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ];
-        }
-
-
-
-        //Data Tenaga Kerja
-        $tenaga_kerja = new Worker();
-        $jumlah_tenaga_kerja = $request->input('tenaga_kerja');
-        $tahun_tenaga_kerja = $request->input('tahun_tenaga_kerja');
-        $data_tenaga_kerja = [];
-
-        foreach ($jumlah_tenaga_kerja as $index => $tkerja) {
-            $tahun = $tahun_tenaga_kerja[$index];
-
-            $data_tenaga_kerja[] = [
-                'jobs_id' => $id_usaha,
-                'jumlah_pekerja' => $tkerja,
-                'tahun' => $tahun,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ];
-        }
+        $usaha->jenis_usaha_id = $request->input('jenis_usaha_id');
+        $usaha->lama_berdirinya_usaha = $request->input('lama_berdirinya_usaha');
+        $usaha->nilai_pendanaan = $request->input('nilai_pendanaan');
+        $usaha->sumber_pendanaan = $request->input('sumber_pendanaan');
+        $usaha->hambatan_usaha = $request->input('hambatan_usaha');
 
         try {
             $pemilik->save();
             $pemilik->usaha()->save($usaha);
-            $pemilik->pelatihan()->save($pelatihan);
-            $usaha->assets()->insert($data_asset);
-            $usaha->funds()->insert($data_omset);
-            $usaha->capacityProductions()->insert($data_kapasitas_produksi);
-            $usaha->workers()->insert($data_tenaga_kerja);
-
             return redirect('/tambah-data-umkm')->with('success', 'Data UMKM berhasil ditambah');
         } catch (Exception $e) {
             return redirect('/tambah-data-umkm')->with('errors', $e->getMessage());
@@ -311,11 +187,8 @@ class UMKMController extends Controller
 
     public function downloadUMKM()
     {
-        //$datas = Pemilik::with(['usaha', 'pelatihan'])->get();
-
         $datas = Pemilik::join('jobs', 'owners.id', '=', 'jobs.owner_id')
-            ->join('trainings', 'owners.id', '=', 'trainings.owner_id')
-            ->select('owners.*', 'jobs.*', 'trainings.*')
+            ->select('owners.*', 'jobs.*')
             ->get();
 
         return view('admin.data-umkm')->with([
@@ -326,89 +199,36 @@ class UMKMController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        // return redirect()->route('dataDownloadUMKM')->with('tahun', $request->tahun_download);
         $tahun_download = $request->input('tahun_download');
 
-        return Excel::download(new DataTableExport($tahun_download), 'data-dinkop-' . now() . '.xlsx');
+        return Excel::download(new DataTableExport($tahun_download), 'data-umkm-rbc-' . now() . '.xlsx');
     }
 
-    public function getDataPemilik()
-    {
-        $data_kelurahan = Pemilik::select('kelurahan_pemilik', DB::raw('count(*) as total'))
-            ->groupBy('kelurahan_pemilik')
-            ->get();
-
-        $data_kecamatan = Pemilik::select('kecamatan_pemilik', DB::raw('count(*) as total'))
-            ->groupBy('kecamatan_pemilik')
-            ->get();
-
-        $data_usaha = DB::table('jobs')
-        ->select('jenis_usaha', DB::raw('YEAR(created_at) as Tahun'), DB::raw('COUNT(*) as Pendaftar'))
-        ->groupBy('jenis_usaha', DB::raw('YEAR(created_at)'))
-        ->get();
-
-        return response()->json([
-            'data_kelurahan' => $data_kelurahan,
-            'data_kecamatan' => $data_kecamatan,
-            'data_usaha' => $data_usaha,
-        ]);
-    }
-
-
+    // Register UMKM user
     public function tambahUmkm(StoreUMKMRequest $request)
     {
-        $request->validate([
+         $request->validate([
 
-            //Data Pemilik
-            'nama_pemilik' => 'required',
-            'sosial_media' => 'required',
-            'no_telepon' => 'required',
-            'kelurahan_pemilik' => 'required',
-            'kecamatan_pemilik' => 'required',
-            'email' => 'required',
-            'pendidikan_terakhir' => 'required',
-            'alamat_pemilik' => 'required',
+           //Data Pemilik
+           'nama_pemilik' => 'required',
+           'jenis_kelamin' => 'required',
+           'alamat_pemilik' => 'required',
+           'kota_pemilik' => 'required',
 
-            //Data Usaha
-            'nama_usaha' => 'required',
-            'bidang_usaha' => 'required',
-            'jenis_usaha' => 'required',
-            'izin_usaha' => 'required',
-            'alamat_usaha' => 'required',
-            'kelurahan_usaha' => 'required',
-            'kecamatan_usaha' => 'required',
-            'nib' => 'required',
-            'no_pendataan_umkm' => 'required',
-            'permodalan_usaha' => 'required',
-            'cakupan_wilayah_pemasaran' => 'required',
-            'jenis_pemasaran' => 'required',
-            'permasalahan_usaha' => 'required',
-
-            //Aset
-            'aset' => 'required',
-            'tahun_aset' => 'required',
-
-            //Modal
-            'omset' => 'required',
-            'tahun_omset' => 'required',
-
-            //Tenaga Kerja
-            'tenaga_kerja' => 'required',
-            'tahun_tenaga_kerja' => 'required',
-
-            //Kapasitas Produksi
-            'kapasitas_produksi' => 'required',
-            'tahun_kapasitas_produksi' => 'required',
-
-            //Data Pelatihan
-            'pengalaman_pelatihan' => 'required',
-            'usulan_pelatihan' => 'required'
+           //Data Usaha
+           'nama_usaha' => 'required',
+           'jenis_usaha_id'  => 'required',
+           'lama_berdirinya_usaha' => 'required',
+           'nilai_pendanaan' => 'required',
+           'sumber_pendanaan' => 'required',
+           'hambatan_usaha' => 'required',
         ]);
 
         //Data Pemilik
         $pemilik = new Pemilik();
 
         $dataPemilik = Helper::checkTable($pemilik);
+
         $id_pemilik = Helper::getLastIdFromTable($pemilik);
 
         if (is_null($dataPemilik)) {
@@ -417,19 +237,26 @@ class UMKMController extends Controller
 
         $pemilik->id = $id_pemilik;
         $pemilik->nama_pemilik = $request->input('nama_pemilik');
+        $pemilik->jenis_kelamin = $request->input('jenis_kelamin');
         $pemilik->alamat_pemilik = $request->input('alamat_pemilik');
-        $pemilik->kelurahan_pemilik = $request->input('kelurahan_pemilik');
-        $pemilik->kecamatan_pemilik = $request->input('kecamatan_pemilik');
-        $pemilik->no_telepon = $request->input('no_telepon');
-        $pemilik->email = $request->input('email');
-        $pemilik->sosial_media = $request->input('sosial_media');
-        $pemilik->pendidikan_terakhir = $request->input('pendidikan_terakhir');
+        $pemilik->kota_pemilik = $request->input('kota_pemilik');
 
+        //Data Jenis Usaha
+        $jenis_usaha = new BusinessType();
+
+        $jenisUsaha = Helper::checkTable($jenis_usaha);
+
+        $id_jenis_usaha = Helper::getLastIdFromTable($jenis_usaha);
+
+        if (is_null($jenisUsaha)) {
+            $jenis_usaha->id = 1;
+        }
 
         //Data Usaha
         $usaha = new Usaha();
 
         $data_usaha = Helper::checkTable($usaha);
+
         $id_usaha = Helper::getLastIdFromTable($usaha);
 
         if (is_null($data_usaha)) {
@@ -439,119 +266,66 @@ class UMKMController extends Controller
         $usaha->id = $id_usaha;
         $usaha->owner_id = $id_pemilik;
         $usaha->nama_usaha = $request->input('nama_usaha');
-        $usaha->bidang_usaha = $request->input('bidang_usaha');
-        $usaha->jenis_usaha = $request->input('jenis_usaha');
-        $usaha->nib_oss = $request->input('nib');
-        $usaha->no_pendataan_umkm  = $request->input('no_pendataan_umkm');
-        $usaha->alamat_usaha  = $request->input('alamat_usaha');
-        $usaha->kelurahan_usaha = $request->input('kelurahan_usaha');
-        $usaha->kecamatan_usaha = $request->input('kecamatan_usaha');
-        $usaha->cakupan_wilayah_pemasaran = $request->input('cakupan_wilayah_pemasaran');
-        $usaha->jenis_pemasaran = $request->input('jenis_pemasaran');
-        $usaha->izin_usaha = $request->input('izin_usaha');
-        $usaha->permodalan_usaha = $request->input('permodalan_usaha');
-        $usaha->permasalahan_usaha = $request->input('permasalahan_usaha');
-
-
-        //Data Pelatihan
-        $pelatihan = new Pelatihan();
-        $pelatihan->owner_id = $id_pemilik;
-        $pelatihan->pengalaman_pelatihan = $request->input('pengalaman_pelatihan');
-        $pelatihan->usulan_pelatihan = $request->input('usulan_pelatihan');
-
-
-
-        // Data Asset
-        $asset = new Asset();
-        $jumlah_aset = $request->input('aset');
-        $tahun_aset = $request->input('tahun_aset');
-        $data_asset = [];
-        $timestamp = now();
-
-        foreach ($jumlah_aset as $index => $aset) {
-            $tahun = $tahun_aset[$index];
-
-            $data_asset[] = [
-                'jobs_id' => $id_usaha,
-                'jumlah_asset' => $aset,
-                'tahun' => $tahun,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ];
-        }
-
-
-
-        //Data Omset
-        $omset = new Fund();
-        $jumlah_omset = $request->input('omset');
-        $tahun_omset = $request->input('tahun_omset');
-        $data_omset = [];
-
-        foreach ($jumlah_omset as $index => $omset) {
-            $tahun = $tahun_omset[$index];
-
-            $data_omset[] = [
-                'jobs_id' => $id_usaha,
-                'jumlah_modal' => $omset,
-                'tahun' => $tahun,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ];
-        }
-
-
-
-        //Data Kapasitas Produksi
-        $kapasitas_produksi = new CapacityProduction();
-        $jumlah_kapasitas_produksi = $request->input('kapasitas_produksi');
-        $tahun_kapasitas_produksi = $request->input('tahun_kapasitas_produksi');
-        $data_kapasitas_produksi = [];
-
-        foreach ($jumlah_kapasitas_produksi as $index => $kproduk) {
-            $tahun = $tahun_kapasitas_produksi[$index];
-
-            $data_kapasitas_produksi[] = [
-                'jobs_id' => $id_usaha,
-                'jumlah_kapasitas_produksi' => $kproduk,
-                'tahun' => $tahun,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ];
-        }
-
-
-
-        //Data Tenaga Kerja
-        $tenaga_kerja = new Worker();
-        $jumlah_tenaga_kerja = $request->input('tenaga_kerja');
-        $tahun_tenaga_kerja = $request->input('tahun_tenaga_kerja');
-        $data_tenaga_kerja = [];
-
-        foreach ($jumlah_tenaga_kerja as $index => $tkerja) {
-            $tahun = $tahun_tenaga_kerja[$index];
-
-            $data_tenaga_kerja[] = [
-                'jobs_id' => $id_usaha,
-                'jumlah_pekerja' => $tkerja,
-                'tahun' => $tahun,
-                'created_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ];
-        }
+        $usaha->jenis_usaha_id = $request->input('jenis_usaha_id');
+        $usaha->lama_berdirinya_usaha = $request->input('lama_berdirinya_usaha');
+        $usaha->nilai_pendanaan = $request->input('nilai_pendanaan');
+        $usaha->sumber_pendanaan = $request->input('sumber_pendanaan');
+        $usaha->hambatan_usaha = $request->input('hambatan_usaha');
 
         try {
             $pemilik->save();
             $pemilik->usaha()->save($usaha);
-            $pemilik->pelatihan()->save($pelatihan);
-            $usaha->assets()->insert($data_asset);
-            $usaha->funds()->insert($data_omset);
-            $usaha->capacityProductions()->insert($data_kapasitas_produksi);
-            $usaha->workers()->insert($data_tenaga_kerja);
-
             return redirect('/registrasi')->with('sukses', 'Data UMKM berhasil ditambah');
         } catch (Exception $e) {
             return redirect('/registrasi')->with('gagal', $e->getMessage());
         }
+    }
+
+    public function getDataPemilik()
+    {
+        $data_usaha = DB::table('jobs')
+        ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
+        ->select('business_types.jenis_usaha as jenis_usaha', DB::raw('YEAR(jobs.created_at) as Tahun'), DB::raw('COUNT(*) as Pendaftar'))
+        ->groupBy('business_types.jenis_usaha', DB::raw('YEAR(jobs.created_at)'))
+        ->get();
+
+        return response()->json([
+            'data_usaha' => $data_usaha,
+        ]);
+    }
+
+    public function getDataAnalytic()
+    {
+        $jk_pria = DB::table('owners')
+        ->where('jenis_kelamin', 'L')
+        ->count();
+
+        $jk_wanita = DB::table('owners')
+        ->where('jenis_kelamin', 'P')
+        ->count();
+
+        $dana_pribadi = DB::table('jobs')
+        ->where('sumber_pendanaan', 'Dana pribadi')
+        ->count();
+
+        $dana_bank = DB::table('jobs')
+        ->where('sumber_pendanaan', 'Dana bank')
+        ->count();
+
+        $usaha_tertinggi = DB::table('jobs')
+        ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
+        ->select('business_types.jenis_usaha as jenis_usaha', 'jobs.jenis_usaha_id', DB::raw('COUNT(*) as total'))
+        ->groupBy('jobs.jenis_usaha_id', 'business_types.jenis_usaha')
+        ->orderByDesc('total')
+        ->limit(1)
+        ->value('jenis_usaha');
+
+        return [
+            'jk_pria' =>  $jk_pria,
+            'jk_wanita' => $jk_wanita,
+            'dana_pribadi' =>  $dana_pribadi,
+            'dana_bank' => $dana_bank,
+            'usaha_tertinggi' => $usaha_tertinggi
+        ];
     }
 }

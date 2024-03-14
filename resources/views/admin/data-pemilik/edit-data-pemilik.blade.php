@@ -24,53 +24,18 @@
                 @csrf
                 <div class="col-md-6 ">
                     <div class="form-group">
-                        <label class="form-label">Nama</label>
-                        <input type="text" class="form-control" name="nama_pemilik" placeholder="" required
-                            value="{{ $data[0]->nama_pemilik }}" />
+                        <label class="form-label">Nama Pemilik</label>
+                        <input type="text" class="form-control" name="nama_pemilik"
+                            placeholder="Input nama pemilik di sini ..." required value="{{ $data[0]->nama_pemilik }}" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label">Sosial Media</label>
-                        <input type="text" class="form-control" name="sosial_media" placeholder="" required
-                            value="{{ $data[0]->sosial_media }}" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="form-label">No Hp</label>
-                        <input type="text" class="form-control" name="no_telepon" placeholder="" required
-                            value="{{ $data[0]->no_telepon }}" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="form-label">Kelurahan</label>
-                        <input type="text" class="form-control" name="kelurahan_pemilik" placeholder="" required
-                            value="{{ $data[0]->kelurahan_pemilik }}" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="form-label">Kecamatan</label>
-                        <input type="text" class="form-control" name="kecamatan_pemilik" placeholder="" required
-                            value="{{ $data[0]->kecamatan_pemilik }}" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" placeholder="" required
-                            value="{{ $data[0]->email }}" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="pendidikan" class="form-label">Pendidikan Terakhir</label>
-                        <select id="pendidikan" class="form-select" name="pendidikan_terakhir" required>
-                            @foreach ($pendidikan as $tingkat)
-                                <option value="{{ $tingkat }}"
-                                    {{ $tingkat == $data[0]->pendidikan_terakhir ? 'selected' : '' }}>{{ $tingkat }}
+                        <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                        <select id="$jenis_kelamin" class="form-select" name="jenis_kelamin" required>
+                            @foreach ($genders as $jenis_kelamin)
+                                <option value="{{ $jenis_kelamin }}"
+                                    {{ $jenis_kelamin == $data[0]->jenis_kelamin ? 'selected' : '' }}>{{ $jenis_kelamin }}
                                 </option>
                             @endforeach
                         </select>
@@ -78,12 +43,20 @@
                 </div>
                 <div class="col-md-8 mb-5">
                     <div class="form-group">
-                        <label class="form-label">Alamat</label>
-                        <textarea type="text" class="form-control" name="alamat_pemilik" rows="6" required>{{ $data[0]->alamat_pemilik }}</textarea>
+                        <label class="form-label">Alamat Pemilik</label>
+                        <textarea type="text" class="form-control" placeholder="Input alamat pemilik di sini ..." name="alamat_pemilik"
+                            rows="6" required>{{ $data[0]->alamat_pemilik }}</textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Kota Pemilik</label>
+                        <input type="kota_pemilik" class="form-control" name="kota_pemilik"
+                            placeholder="Input kota pemilik di sini ..." required value="{{ $data[0]->kota_pemilik }}" />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6 col-sm-5 col-md-3">
+                    <div class="col-6 col-sm-5 col-md-3 mt-3">
                         <button class="btn btn-secondary" type="reset">Reset</button>
                         <button id="tambah-data-umkm" class="btn btn-primary" type="submit">Edit Data</button>
                     </div>

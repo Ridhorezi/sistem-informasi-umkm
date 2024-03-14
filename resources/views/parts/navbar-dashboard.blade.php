@@ -2,6 +2,6 @@
 
     <img src="{{ asset('/img/logodinaskoperasi.png') }}" alt="">
 
-    <p>Dinas Koperasi Usaha Mikro <br>Kota Semarang</p>
-    
+    <p>Rumah Berdaya Cilegon</p>
+
 </div>

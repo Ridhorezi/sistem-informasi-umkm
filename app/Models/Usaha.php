@@ -19,23 +19,8 @@ class Usaha extends Model
         return $this->belongsTo(Pemilik::class, 'owner_id');
     }
 
-    public function funds()
+    public function jenisUsaha()
     {
-        return $this->hasMany(Fund::class, 'jobs_id');
-    }
-
-    public function assets()
-    {
-        return $this->hasMany(Asset::class, 'jobs_id');
-    }
-
-    public function workers()
-    {
-        return $this->hasMany(Worker::class, 'jobs_id');
-    }
-
-    public function capacityProductions()
-    {
-        return $this->hasMany(CapacityProduction::class, 'jobs_id');
+        return $this->belongsTo(BusinessType::class, 'jenis_usaha_id');
     }
 }

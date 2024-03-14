@@ -71,6 +71,7 @@
 
     // Button Reset
     const form = document.querySelector('form');
+
     form.querySelector('button[type="reset"]').addEventListener('click', (event) => {
         event.preventDefault();
         form.reset();

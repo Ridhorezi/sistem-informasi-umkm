@@ -276,3 +276,23 @@ body {
         margin-top: 0px !important;
     }
 }
+
+@media (min-width: 992px) {
+    .navbar-brand img {
+        width: 50px; /* Atur lebar logo untuk tampilan web */
+    }
+}
+
+/* Untuk tampilan tablet */
+@media (max-width: 991px) {
+    .navbar-brand img {
+        width: 40px; /* Atur lebar logo untuk tampilan tablet */
+    }
+}
+
+/* Untuk tampilan mobile */
+@media (max-width: 767px) {
+    .navbar-brand img {
+        width: 30px; /* Atur lebar logo untuk tampilan mobile */
+    }
+}

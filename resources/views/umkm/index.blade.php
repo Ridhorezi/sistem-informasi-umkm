@@ -2,7 +2,7 @@
 
 @section('container')
     <!-- Section Sambutan -->
-    <section class="sambutan">
+    {{-- <section class="sambutan">
         <div class="gap-section">
             <div class="section-title">Sambutan Direktur RBC</div>
             <div class="line-title"></div>
@@ -36,17 +36,18 @@
                 </div>
             </div>
         </div>
-    </section> <!-- End Section Sambutan -->
+    </section> --}}
+    <!-- End Section Sambutan -->
 
     <!-- Section Videos -->
-    <section class="videos">
+    {{-- <section class="videos">
         <div class="gap-section">
             <div class="section-title">Video Kami</div>
             <div class="line-title"></div>
             <div class="row-item">
                 <iframe width="560" height="315"
-                    src="https://www.youtube-nocookie.com/embed/6tI1gG5OYnk?si=v076pojD-U0RRLWr"
-                    title="YouTube video player" frameborder="0"
+                    src="https://www.youtube-nocookie.com/embed/6tI1gG5OYnk?si=v076pojD-U0RRLWr" title="YouTube video player"
+                    frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen></iframe>
                 <iframe width="560" height="315"
@@ -56,10 +57,11 @@
                     allowfullscreen></iframe>
             </div>
         </div>
-    </section> <!-- End Section Videos -->
+    </section> --}}
+    <!-- End Section Videos -->
 
     <!-- Section Link Web -->
-    <section class="link-web">
+    {{-- <section class="link-web">
         <div class="gap-section">
             <div class="section-title">Tautan Situs Web</div>
             <div class="line-title"></div>
@@ -88,12 +90,12 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Call To Action -->
     <section class="cta"
         style="background-image: linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url({{ asset('img/img-umkm/banner2.jpg') }});">
-        <h1>Jika ada kendala, segera hubungi kami!</h1>
+        <h1>Jika ada kendala dalam proses registrasi, segera hubungi tim kami melalui kontak di bawah ini!</h1>
         <a href="/contact" class="primary-btn">kontak</a>
     </section>
 @endsection

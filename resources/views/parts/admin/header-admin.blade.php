@@ -3,8 +3,7 @@
         <button class="btn btn-default" id="btn-slider" type="button">
             <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
         </button>
-        <a class="navbar-brand me-auto" href="/dashboard"><img style="width:15%; height:15%"
-                src="{{ asset('/img/logo.png') }}" /></a>
+        <a class="navbar-brand me-auto" href="/dashboard"><img src="{{ asset('/img/logo.png') }}" /></a>
         <ul class="nav ms-auto">
             <li class="nav-item dropstart">
                 <a class="nav-link text-dark ps-3 pe-1" href="#" id="navbarDropdown" role="button"
@@ -19,9 +18,11 @@
                             <small>{{ $user->email }}</small>
                         </div>
                     </div>
-                    {{-- <a class="dropdown-item" href="profil.html">
-                        <i class="fa fa-user fa-lg me-3" aria-hidden="true"></i>Profile
-                    </a> --}}
+                    @if (auth()->user()->hasRole('pimpinan'))
+                        <a class="dropdown-item" href="{{ route('editUser', ['id' => $user->id]) }}">
+                            <i class="fa fa-user fa-lg me-3" aria-hidden="true"></i>Edit Profile
+                        </a>
+                    @endif
                     <form action="/logout" method="post">
                         @csrf
                         <button class="btn btn-link dropdown-item">

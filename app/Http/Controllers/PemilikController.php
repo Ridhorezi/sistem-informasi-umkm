@@ -12,6 +12,11 @@ use App\Http\Requests\UpdatePemilikRequest;
 
 class PemilikController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin,pimpinan');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -72,11 +77,11 @@ class PemilikController extends Controller
     {
         $data = Pemilik::where('id', $id)->get();
 
-        $pendidikan = ['S1', 'D3', 'SMA', 'SMP', 'SD'];
+        $genders = ['P', 'L'];
 
         return view('admin.data-pemilik.edit-data-pemilik')->with([
             'user' => Auth::user(),
-            'pendidikan' => $pendidikan,
+            'genders' => $genders,
             'data' => $data
         ]);
     }
@@ -90,30 +95,20 @@ class PemilikController extends Controller
      */
     public function update(UpdatePemilikRequest $request, Pemilik $pemilik)
     {
-
         $request->validate([
             'nama_pemilik' => 'required',
-            'sosial_media' => 'required',
-            'no_telepon' => 'required',
-            'kelurahan_pemilik' => 'required',
-            'kecamatan_pemilik' => 'required',
-            'email' => 'required',
-            'pendidikan_terakhir' => 'required',
+            'jenis_kelamin' => 'required',
             'alamat_pemilik' => 'required',
+            'kota_pemilik' => 'required',
         ]);
-
 
         $id_pemilik = Route::getCurrentRoute()->parameter('id');
 
         Pemilik::where('id', $id_pemilik)->update([
             'nama_pemilik' => $request->input('nama_pemilik'),
+            'jenis_kelamin' => $request->input('jenis_kelamin'),
             'alamat_pemilik' => $request->input('alamat_pemilik'),
-            'kelurahan_pemilik' => $request->input('kelurahan_pemilik'),
-            'kecamatan_pemilik' => $request->input('kecamatan_pemilik'),
-            'no_telepon' => $request->input('no_telepon'),
-            'email' => $request->input('email'),
-            'sosial_media' => $request->input('sosial_media'),
-            'pendidikan_terakhir' => $request->input('pendidikan_terakhir'),
+            'kota_pemilik' => $request->input('kota_pemilik'),
         ]);
 
         return redirect()->route('dataPemilik')->with('success', 'Data pemilik berhasil diubah');
@@ -128,12 +123,6 @@ class PemilikController extends Controller
     public function destroy($id)
     {
         $data = Pemilik::findOrFail($id);
-
-        // if ($data->delete() === true) {
-        //     return redirect()->route('dataPemilik')->with('success', 'Data pemilik berhasil dihapus');
-        // } else {
-        //     return redirect()->route('dataPemilik')->with('error', 'Data pemilik tidak dapat dihapus karena masih terkait dengan data lain');
-        // }
 
         try {
             if ($data) {

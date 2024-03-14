@@ -36,13 +36,9 @@
                                     <tr>
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $data['nama_pemilik'] }}</td>
+                                        <td>{{ $data['jenis_kelamin'] }}</td>
                                         <td>{{ $data['alamat_pemilik'] }}</td>
-                                        <td>{{ $data['kelurahan_pemilik'] }}</td>
-                                        <td>{{ $data['kecamatan_pemilik'] }}</td>
-                                        <td>{{ $data['no_telepon'] }}</td>
-                                        <td>{{ $data['email'] }}</td>
-                                        <td>{{ $data['sosial_media'] }}</td>
-                                        <td>{{ $data['pendidikan_terakhir'] }}</td>
+                                        <td>{{ $data['kota_pemilik'] }}</td>
                                         <td>{{ $data['created_at'] }}</td>
                                         <td>{{ $data['updated_at'] }}</td>
                                         <td>
@@ -54,7 +50,6 @@
                                                 <i style="color: red" class="fa fa-trash fa-lg box-icon mb-2"
                                                     aria-hidden="true"></i>
                                             </button>
-
                                             <form id="hapus-form-{{ $data->id }}" class="form-inline"
                                                 action="{{ route('hapusPemilik', ['id' => $data->id]) }}" method="post">
                                                 @csrf

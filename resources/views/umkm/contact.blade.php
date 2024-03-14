@@ -33,7 +33,7 @@
                         <i class="fa fa-phone"></i>
                         <span>
                             <h5>Telepon</h5>
-                            <p>0812121212</p>
+                            <p>(+62) 878714994339</p>
                         </span>
                     </div>
 
@@ -41,12 +41,12 @@
                         <i class="fa fa-envelope-o"></i>
                         <span>
                             <h5>Email</h5>
-                            <p>rbc@gmail.com</p>
+                            <p>info@rbc.or.id</p>
                         </span>
                     </div>
                 </div>
                 <div class="contact-col">
-                    <form action="https://formsubmit.co/rbc@gmail.com" method="POST">
+                    <form action="https://formsubmit.co/info@rbc.or.id" method="POST">
                         <input type="text" name="name" placeholder="nama" required />
                         <input type="email" name="email" placeholder="email" required />
                         <input type="text" name="subject" placeholder="subject" required />

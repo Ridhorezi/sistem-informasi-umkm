@@ -1,7 +1,7 @@
 <section class="sub-header"
     style="background-image:linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)), url({{ asset('img/img-umkm/banner.jpg') }})">
     <nav>
-        <a href="/"><img style="width: 10%; height:10%" src="{{ asset('img/logo.png') }}" /></a>
+        <a href="/"><img style="width: 10%; height:10%; display:flex;" src="{{ asset('img/logo.png') }}" /></a>
         <div class="nav-links" id="navLinks">
             <i class="fa fa-times" onclick="hideMenu()"></i>
             <ul>

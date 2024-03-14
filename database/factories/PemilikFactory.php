@@ -18,13 +18,9 @@ class PemilikFactory extends Factory
     {
         return [
             'nama_pemilik' => $this->faker->name(),
+            'jenis_kelamin' => $this->faker->gender(),
             'alamat_pemilik' => $this->faker->address(),
-            'keluarahan_pemilik' => $this->faker->secondaryAddress(),
-            'kecamatan_pemilik' => $this->faker->city(),
-            'no_telepon' => $this->faker->phoneNumber(),
-            'email' => $this->faker->email(),
-            'sosial_media' => $this->faker->sentences(2),
-            'pendidikan_terakhir' => $this->faker->jobTitle()
+            'kota_pemilik' => $this->faker->city()
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreLoginRequest;
 use App\Http\Requests\UpdateLoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -95,11 +96,17 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            // Log user role
+            $user = Auth::user();
+            Log::info('User authenticated', ['user_id' => $user->id, 'role' => $user->role->name]);
+
             return redirect()->intended('dashboard')->with('success', 'Login berhasil');
         } else {
             return view('login.index')->with("login_error", 'Login gagal');
         }
     }
+
 
     public function logout(Request $request) {
         Auth::logout();
