@@ -41,12 +41,12 @@
                         <i class="fa fa-envelope-o"></i>
                         <span>
                             <h5>Email</h5>
-                            <p>info@rbc.or.id</p>
+                            <p>info@pendaftaranrbc.web.id</p>
                         </span>
                     </div>
                 </div>
                 <div class="contact-col">
-                    <form action="https://formsubmit.co/info@rbc.or.id" method="POST">
+                    <form action="https://formsubmit.co/info@pendaftaranrbc.web.id" method="POST">
                         <input type="text" name="name" placeholder="nama" required />
                         <input type="email" name="email" placeholder="email" required />
                         <input type="text" name="subject" placeholder="subject" required />
