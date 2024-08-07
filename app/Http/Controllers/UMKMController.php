@@ -76,7 +76,7 @@ class UMKMController extends Controller
 
             //Data Usaha
             'nama_usaha' => 'required',
-            'jenis_usaha_id'  => 'required',
+            'jenis_usaha_id' => 'required',
             'lama_berdirinya_usaha' => 'required',
             'nilai_pendanaan' => 'required',
             'sumber_pendanaan' => 'required',
@@ -100,16 +100,16 @@ class UMKMController extends Controller
         $pemilik->alamat_pemilik = $request->input('alamat_pemilik');
         $pemilik->kota_pemilik = $request->input('kota_pemilik');
 
-         //Data Jenis Usaha
-         $jenis_usaha = new BusinessType();
+        //Data Jenis Usaha
+        $jenis_usaha = new BusinessType();
 
-         $jenisUsaha = Helper::checkTable($jenis_usaha);
+        $jenisUsaha = Helper::checkTable($jenis_usaha);
 
-         $id_jenis_usaha = Helper::getLastIdFromTable($jenis_usaha);
+        $id_jenis_usaha = Helper::getLastIdFromTable($jenis_usaha);
 
-         if (is_null($jenisUsaha)) {
-             $jenis_usaha->id = 1;
-         }
+        if (is_null($jenisUsaha)) {
+            $jenis_usaha->id = 1;
+        }
 
         //Data Usaha
         $usaha = new Usaha();
@@ -207,21 +207,21 @@ class UMKMController extends Controller
     // Register UMKM user
     public function tambahUmkm(StoreUMKMRequest $request)
     {
-         $request->validate([
+        $request->validate([
 
-           //Data Pemilik
-           'nama_pemilik' => 'required',
-           'jenis_kelamin' => 'required',
-           'alamat_pemilik' => 'required',
-           'kota_pemilik' => 'required',
+            //Data Pemilik
+            'nama_pemilik' => 'required',
+            'jenis_kelamin' => 'required',
+            'alamat_pemilik' => 'required',
+            'kota_pemilik' => 'required',
 
-           //Data Usaha
-           'nama_usaha' => 'required',
-           'jenis_usaha_id'  => 'required',
-           'lama_berdirinya_usaha' => 'required',
-           'nilai_pendanaan' => 'required',
-           'sumber_pendanaan' => 'required',
-           'hambatan_usaha' => 'required',
+            //Data Usaha
+            'nama_usaha' => 'required',
+            'jenis_usaha_id' => 'required',
+            'lama_berdirinya_usaha' => 'required',
+            'nilai_pendanaan' => 'required',
+            'sumber_pendanaan' => 'required',
+            'hambatan_usaha' => 'required',
         ]);
 
         //Data Pemilik
@@ -284,10 +284,10 @@ class UMKMController extends Controller
     public function getDataPemilik()
     {
         $data_usaha = DB::table('jobs')
-        ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
-        ->select('business_types.jenis_usaha as jenis_usaha', DB::raw('YEAR(jobs.created_at) as Tahun'), DB::raw('COUNT(*) as Pendaftar'))
-        ->groupBy('business_types.jenis_usaha', DB::raw('YEAR(jobs.created_at)'))
-        ->get();
+            ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
+            ->select('business_types.jenis_usaha as jenis_usaha', DB::raw('YEAR(jobs.created_at) as Tahun'), DB::raw('COUNT(*) as Pendaftar'))
+            ->groupBy('business_types.jenis_usaha', DB::raw('YEAR(jobs.created_at)'))
+            ->get();
 
         return response()->json([
             'data_usaha' => $data_usaha,
@@ -297,35 +297,81 @@ class UMKMController extends Controller
     public function getDataAnalytic()
     {
         $jk_pria = DB::table('owners')
-        ->where('jenis_kelamin', 'L')
-        ->count();
+            ->where('jenis_kelamin', 'L')
+            ->count();
 
         $jk_wanita = DB::table('owners')
-        ->where('jenis_kelamin', 'P')
-        ->count();
+            ->where('jenis_kelamin', 'P')
+            ->count();
 
         $dana_pribadi = DB::table('jobs')
-        ->where('sumber_pendanaan', 'Dana pribadi')
-        ->count();
+            ->where('sumber_pendanaan', 'Dana pribadi')
+            ->count();
 
         $dana_bank = DB::table('jobs')
-        ->where('sumber_pendanaan', 'Dana bank')
-        ->count();
+            ->where('sumber_pendanaan', 'Dana bank')
+            ->count();
 
         $usaha_tertinggi = DB::table('jobs')
-        ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
-        ->select('business_types.jenis_usaha as jenis_usaha', 'jobs.jenis_usaha_id', DB::raw('COUNT(*) as total'))
-        ->groupBy('jobs.jenis_usaha_id', 'business_types.jenis_usaha')
-        ->orderByDesc('total')
-        ->limit(1)
-        ->value('jenis_usaha');
+            ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
+            ->select('business_types.jenis_usaha as jenis_usaha', 'jobs.jenis_usaha_id', DB::raw('COUNT(*) as total'))
+            ->groupBy('jobs.jenis_usaha_id', 'business_types.jenis_usaha')
+            ->orderByDesc('total')
+            ->limit(1)
+            ->value('jenis_usaha');
 
         return [
-            'jk_pria' =>  $jk_pria,
+            'jk_pria' => $jk_pria,
             'jk_wanita' => $jk_wanita,
-            'dana_pribadi' =>  $dana_pribadi,
+            'dana_pribadi' => $dana_pribadi,
             'dana_bank' => $dana_bank,
             'usaha_tertinggi' => $usaha_tertinggi
         ];
+    }
+
+    public function getCombinedData()
+    {
+        // Data dari getDataPemilik
+        $data_usaha = DB::table('jobs')
+            ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
+            ->select('business_types.jenis_usaha as jenis_usaha', DB::raw('YEAR(jobs.created_at) as Tahun'), DB::raw('COUNT(*) as Pendaftar'))
+            ->groupBy('business_types.jenis_usaha', DB::raw('YEAR(jobs.created_at)'))
+            ->get();
+
+        // Data dari getDataAnalytic
+        $jk_pria = DB::table('owners')
+            ->where('jenis_kelamin', 'L')
+            ->count();
+
+        $jk_wanita = DB::table('owners')
+            ->where('jenis_kelamin', 'P')
+            ->count();
+
+        $dana_pribadi = DB::table('jobs')
+            ->where('sumber_pendanaan', 'Dana pribadi')
+            ->count();
+
+        $dana_bank = DB::table('jobs')
+            ->where('sumber_pendanaan', 'Dana bank')
+            ->count();
+
+        $usaha_tertinggi = DB::table('jobs')
+            ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
+            ->select('business_types.jenis_usaha as jenis_usaha', 'jobs.jenis_usaha_id', DB::raw('COUNT(*) as total'))
+            ->groupBy('jobs.jenis_usaha_id', 'business_types.jenis_usaha')
+            ->orderByDesc('total')
+            ->limit(1)
+            ->value('jenis_usaha');
+
+        return response()->json([
+            'data_usaha' => $data_usaha,
+            'data_analytic' => [
+                'jk_pria' => $jk_pria,
+                'jk_wanita' => $jk_wanita,
+                'dana_pribadi' => $dana_pribadi,
+                'dana_bank' => $dana_bank,
+                'usaha_tertinggi' => $usaha_tertinggi
+            ]
+        ]);
     }
 }

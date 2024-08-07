@@ -77,6 +77,9 @@ Route::middleware(['auth', 'role:admin,pimpinan'])->group(function () {
     // Get Data Analytic
     Route::get('/umkm/data-analytic', [UMKMController::class, 'getDataAnalytic']);
 
+    // Get Data Analytic
+    Route::get('/umkm/data-combined', [UMKMController::class, 'getCombinedData']);
+
     // Profile Setting
     // Route::get('/data-profile/edit/{id}', [ProfileController::class, 'edit'])->name('editProfile');
     // Route::get('/data-profile/edit/{id}', [ProfileController::class, 'update'])->name('editProfile');

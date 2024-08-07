@@ -115,15 +115,21 @@
                     </div>
                 </div>
             </div>
+            <button id="exportPdfButton" class="btn btn-primary m-2">Export Chart</button>
+            <!-- Charts -->
             <div class="charts">
-                <div class="row g-3 mb-4">
-                    <div class="col-12">
-                        <div class="d-block rounded shadow bg-white p-3">
-                            <canvas id="myChartOne"></canvas>
-                        </div>
+                <div class="chart-container">
+                    <div class="d-block rounded shadow bg-white p-3">
+                        <canvas id="myChartOne"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="d-block rounded shadow bg-white p-3">
+                        <canvas id="combinedData"></canvas>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -135,6 +141,28 @@
             border-radius: 50%;
             align-items: center;
             justify-content: center;
+        }
+
+        .charts {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .chart-container {
+            flex: 1;
+            margin: 10px;
+            max-width: 50%;
+            /* Atur lebar maksimum setiap grafik */
+            box-sizing: border-box;
+            /* Memastikan padding dan margin diperhitungkan dalam lebar */
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            /* Atur lebar canvas menjadi 100% dari container */
+            height: auto !important;
+            /* Biarkan tinggi otomatis untuk menjaga rasio aspek */
         }
     </style>
 @endsection

@@ -21,10 +21,13 @@ class DashboardController extends Controller
     {
         $dataAnalytic = $this->umkmController->getDataAnalytic();
 
+        $combinedData = $this->umkmController->getCombinedData();
+
         return view('admin.index')->with([
             'user' => Auth::user(),
             'count' => Pemilik::count(),
             'dataAnalytic' => $dataAnalytic,
+            'combinedData' => $combinedData,
         ]);
     }
 }
