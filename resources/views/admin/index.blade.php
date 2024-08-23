@@ -123,9 +123,24 @@
                         <canvas id="myChartOne"></canvas>
                     </div>
                 </div>
-                <div class="chart-container">
+                {{-- <div class="chart-container">
                     <div class="d-block rounded shadow bg-white p-3">
                         <canvas id="combinedData"></canvas>
+                    </div>
+                </div> --}}
+                <div class="chart-container">
+                    <div class="d-block rounded shadow bg-white p-3">
+                        <canvas id="genderData"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="d-block rounded shadow bg-white p-3">
+                        <canvas id="businessTypeData"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="d-block rounded shadow bg-white p-3">
+                        <canvas id="fundingSourceData"></canvas>
                     </div>
                 </div>
             </div>
@@ -144,25 +159,18 @@
         }
 
         .charts {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 10px;
         }
 
         .chart-container {
-            flex: 1;
-            margin: 10px;
-            max-width: 50%;
-            /* Atur lebar maksimum setiap grafik */
             box-sizing: border-box;
-            /* Memastikan padding dan margin diperhitungkan dalam lebar */
         }
 
         .chart-container canvas {
             width: 100% !important;
-            /* Atur lebar canvas menjadi 100% dari container */
             height: auto !important;
-            /* Biarkan tinggi otomatis untuk menjaga rasio aspek */
         }
     </style>
 @endsection

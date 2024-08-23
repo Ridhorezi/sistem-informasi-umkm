@@ -1,33 +1,45 @@
-document.getElementById('exportPdfButton').addEventListener('click', function() {
-    console.log("Button clicked!");
+document
+    .getElementById("exportPdfButton")
+    .addEventListener("click", function () {
+        console.log("Button clicked!");
 
-    // Ambil kedua canvas
-    var canvas1 = document.getElementById('myChartOne');
-    var canvas2 = document.getElementById('combinedData');
-    
-    if (canvas1 && canvas2) {
-        console.log("Canvas found:", canvas1, canvas2);
+        // Ambil kedua canvas
+        var canvas1 = document.getElementById("myChartOne");
+        var canvas2 = document.getElementById("genderData");
+        var canvas3 = document.getElementById("businessTypeData");
+        var canvas4 = document.getElementById("fundingSourceData");
 
-        // Buat objek jsPDF
-        var pdf = new jspdf.jsPDF('landscape');
-        
-        // Gambar canvas pertama (chart pertama)
-        var imgData1 = canvas1.toDataURL('image/png');
-        pdf.addImage(imgData1, 'PNG', 10, 10, 280, 150); // Ubah ukuran dan posisi sesuai kebutuhan
-        
-        // Tambahkan halaman baru untuk canvas kedua (chart kedua)
-        pdf.addPage();
-        var imgData2 = canvas2.toDataURL('image/png');
-        pdf.addImage(imgData2, 'PNG', 10, 10, 280, 150); // Ubah ukuran dan posisi sesuai kebutuhan
-        
-        // Simpan file PDF dengan nama tertentu
-        pdf.save('chart.pdf');
-    } else {
-        console.error("One or both canvases not found");
-    }
-});
+        if (canvas1 && canvas2 && canvas3 && canvas4) {
+            console.log("Canvas found:", canvas1, canvas2, canvas3, canvas4);
 
+            // Buat objek jsPDF
+            var pdf = new jspdf.jsPDF("landscape");
 
+            // Gambar canvas pertama (chart pertama)
+            var imgData1 = canvas1.toDataURL("image/png");
+            pdf.addImage(imgData1, "PNG", 10, 10, 280, 150);
+
+            // Tambahkan halaman baru untuk canvas kedua (chart kedua)
+            pdf.addPage();
+            var imgData2 = canvas2.toDataURL("image/png");
+            pdf.addImage(imgData2, "PNG", 10, 10, 280, 150);
+
+            // Tambahkan halaman baru untuk canvas kedua (chart kedua)
+            pdf.addPage();
+            var imgData3 = canvas3.toDataURL("image/png");
+            pdf.addImage(imgData3, "PNG", 10, 10, 280, 150);
+
+            // Tambahkan halaman baru untuk canvas kedua (chart kedua)
+            pdf.addPage();
+            var imgData4 = canvas4.toDataURL("image/png");
+            pdf.addImage(imgData4, "PNG", 10, 10, 280, 150);
+
+            // Simpan file PDF
+            pdf.save("chart.pdf");
+        } else {
+            console.error("One or both canvases not found");
+        }
+    });
 
 $("#btn-slider").click(function () {
     if ($("#sliders").hasClass("active")) {
@@ -43,8 +55,6 @@ $("#sliders-background").click(function () {
     $("#sliders").removeClass("active");
     $("#sliders-background").removeClass("active");
 });
-
-// ...
 
 fetch("/umkm/data-pendaftar")
     .then((response) => response.json())
@@ -106,6 +116,7 @@ fetch("/umkm/data-pendaftar")
                 })),
             },
             options: {
+                responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -127,8 +138,7 @@ fetch("/umkm/data-pendaftar")
         console.log("Tahun:", tahun); // cek tahun
     });
 
-
-    fetch("/umkm/data-combined")
+fetch("/umkm/data-combined")
     .then((response) => response.json())
     .then(({ data_usaha, data_analytic }) => {
         // definisi variabel untuk polar chart
@@ -156,7 +166,9 @@ fetch("/umkm/data-pendaftar")
         });
 
         // Diagram Polar Area
-        let ctxCombined = document.getElementById("combinedData").getContext("2d");
+        let ctxCombined = document
+            .getElementById("combinedData")
+            .getContext("2d");
 
         // definisi warna untuk setiap jenis usaha
         let colors = [
@@ -200,20 +212,24 @@ fetch("/umkm/data-pendaftar")
             let color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
                 Math.random() * 256
             )}, ${Math.floor(Math.random() * 256)}, 0.7)`;
-            let borderColor = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
+            let borderColor = `rgba(${Math.floor(
                 Math.random() * 256
-            )}, ${Math.floor(Math.random() * 256)}, 1)`;
+            )}, ${Math.floor(Math.random() * 256)}, ${Math.floor(
+                Math.random() * 256
+            )}, 1)`;
             colors.push(color);
             borderColors.push(borderColor);
         }
 
-        let datasets = [{
-            label: "Informasi Umum",
-            data: data,
-            backgroundColor: colors,
-            borderColor: borderColors,
-            borderWidth: 1,
-        }];
+        let datasets = [
+            {
+                label: "Informasi Umum",
+                data: data,
+                backgroundColor: colors,
+                borderColor: borderColors,
+                borderWidth: 1,
+            },
+        ];
 
         let polarChart = new Chart(ctxCombined, {
             type: "pie",
@@ -229,14 +245,20 @@ fetch("/umkm/data-pendaftar")
                             label: function (tooltipItem) {
                                 if (tooltipItem.label === "Usaha Tertinggi") {
                                     return `${tooltipItem.label}: ${usaha_tertinggi}`;
-                                } else if (tooltipItem.label === "Jenis Usaha") {
+                                } else if (
+                                    tooltipItem.label === "Jenis Usaha"
+                                ) {
                                     return `${tooltipItem.label}: ${
                                         data_usaha.find(
-                                            (usaha) => usaha.jenis_usaha === tooltipItem.raw.label
+                                            (usaha) =>
+                                                usaha.jenis_usaha ===
+                                                tooltipItem.raw.label
                                         ).jenis_usaha
                                     }`;
                                 } else {
-                                    return `${tooltipItem.label}: ${tooltipItem.raw.toFixed(2)}`;
+                                    return `${
+                                        tooltipItem.label
+                                    }: ${tooltipItem.raw.toFixed(2)}`;
                                 }
                             },
                         },
@@ -246,6 +268,147 @@ fetch("/umkm/data-pendaftar")
         });
     });
 
+fetch("/umkm/gender-data")
+    .then((response) => response.json())
+    .then((data) => {
+        const labels = data.map((item) => item.jenis_kelamin);
+        const percentages = data.map((item) => item.percentage);
 
+        let ctx = document.getElementById("genderData").getContext("2d");
 
+        new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: percentages,
+                        backgroundColor: [
+                            "rgba(255, 99, 132, 0.7)",
+                            "rgba(54, 162, 235, 0.7)",
+                        ],
+                        borderColor: [
+                            "rgba(255, 99, 132, 1)",
+                            "rgba(54, 162, 235, 1)",
+                        ],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return `${
+                                    tooltipItem.label
+                                }: ${tooltipItem.raw.toFixed(2)}%`;
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    });
 
+fetch("/umkm/businessType-data")
+    .then((response) => response.json())
+    .then((data) => {
+        const labels = data.map((item) => item.jenis_usaha);
+        const percentages = data.map((item) => item.percentage);
+
+        let ctx = document.getElementById("businessTypeData").getContext("2d");
+
+        new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: percentages,
+                        backgroundColor: [
+                            "rgba(255, 99, 132, 0.7)",
+                            "rgba(54, 162, 235, 0.7)",
+                            "rgba(255, 206, 86, 0.7)",
+                            "rgba(75, 192, 192, 0.7)",
+                            "rgba(153, 102, 255, 0.7)",
+                        ],
+                        borderColor: [
+                            "rgba(255, 99, 132, 1)",
+                            "rgba(54, 162, 235, 1)",
+                            "rgba(255, 206, 86, 1)",
+                            "rgba(75, 192, 192, 1)",
+                            "rgba(153, 102, 255, 1)",
+                        ],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return `${
+                                    tooltipItem.label
+                                }: ${tooltipItem.raw.toFixed(2)}%`;
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    });
+
+fetch("/umkm/fundingSource-data")
+    .then((response) => response.json())
+    .then((data) => {
+        const labels = data.map((item) => item.sumber_dana);
+        const percentages = data.map((item) => item.percentage);
+
+        let ctx = document.getElementById("fundingSourceData").getContext("2d");
+
+        new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Persentase Sumber Dana",
+                        data: percentages,
+                        backgroundColor: [
+                            "rgba(255, 159, 64, 0.7)",
+                            "rgba(255, 99, 132, 0.7)",
+                            "rgba(54, 162, 235, 0.7)",
+                            "rgba(75, 192, 192, 0.7)",
+                            "rgba(153, 102, 255, 0.7)",
+                        ],
+                        borderColor: [
+                            "rgba(255, 159, 64, 1)",
+                            "rgba(255, 99, 132, 1)",
+                            "rgba(54, 162, 235, 1)",
+                            "rgba(75, 192, 192, 1)",
+                            "rgba(153, 102, 255, 1)",
+                        ],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return `${
+                                    tooltipItem.label
+                                }: ${tooltipItem.raw.toFixed(2)}%`;
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    });

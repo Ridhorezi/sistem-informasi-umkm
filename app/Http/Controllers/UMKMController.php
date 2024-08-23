@@ -374,4 +374,65 @@ class UMKMController extends Controller
             ]
         ]);
     }
+
+    public function getGenderData()
+    {
+        $total = DB::table('owners')->count();
+
+        $data = DB::table('owners')
+            ->select(DB::raw('jenis_kelamin, COUNT(*) as count'))
+            ->groupBy('jenis_kelamin')
+            ->get();
+
+        $result = $data->map(function ($item) use ($total) {
+            return [
+                'jenis_kelamin' => $item->jenis_kelamin,
+                'percentage' => ($item->count / $total) * 100
+            ];
+        });
+
+        return response()->json($result);
+    }
+
+
+    public function getBusinessTypeData()
+    {
+        $total = DB::table('jobs')->count();
+
+        $data = DB::table('jobs')
+            ->join('business_types', 'jobs.jenis_usaha_id', '=', 'business_types.id')
+            ->select(DB::raw('business_types.jenis_usaha as jenis_usaha, COUNT(*) as count'))
+            ->groupBy('business_types.jenis_usaha')
+            ->get();
+
+        $result = $data->map(function ($item) use ($total) {
+            return [
+                'jenis_usaha' => $item->jenis_usaha,
+                'percentage' => ($item->count / $total) * 100
+            ];
+        });
+
+        return response()->json($result);
+    }
+
+
+    public function getFundingSourceData()
+    {
+        $total = DB::table('jobs')->count();
+
+        $data = DB::table('jobs')
+            ->select(DB::raw('sumber_pendanaan as sumber_dana, COUNT(*) as count'))
+            ->groupBy('sumber_pendanaan')
+            ->get();
+
+        $result = $data->map(function ($item) use ($total) {
+            return [
+                'sumber_dana' => $item->sumber_dana,
+                'percentage' => ($item->count / $total) * 100
+            ];
+        });
+
+        return response()->json($result);
+    }
+    
 }

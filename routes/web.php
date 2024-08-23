@@ -77,8 +77,17 @@ Route::middleware(['auth', 'role:admin,pimpinan'])->group(function () {
     // Get Data Analytic
     Route::get('/umkm/data-analytic', [UMKMController::class, 'getDataAnalytic']);
 
-    // Get Data Analytic
+    // Get Data Combined
     Route::get('/umkm/data-combined', [UMKMController::class, 'getCombinedData']);
+
+    // Get Data Gender
+    Route::get('/umkm/gender-data', [UMKMController::class, 'getGenderData']);
+
+    // Get Data BusinessTypes
+    Route::get('/umkm/businessType-data', [UMKMController::class, 'getBusinessTypeData']);
+
+     // Get Data FundingSource
+     Route::get('/umkm/fundingSource-data', [UMKMController::class, 'getFundingSourceData']);
 
     // Profile Setting
     // Route::get('/data-profile/edit/{id}', [ProfileController::class, 'edit'])->name('editProfile');

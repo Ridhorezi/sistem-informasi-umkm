@@ -23,11 +23,20 @@ class DashboardController extends Controller
 
         $combinedData = $this->umkmController->getCombinedData();
 
+        $genderData = $this->umkmController->getGenderData();
+
+        $businessTypeData = $this->umkmController->getBusinessTypeData();
+
+        $fundingSourceData = $this->umkmController->getFundingSourceData();
+
         return view('admin.index')->with([
             'user' => Auth::user(),
             'count' => Pemilik::count(),
             'dataAnalytic' => $dataAnalytic,
             'combinedData' => $combinedData,
+            'genderData' => $genderData,
+            'businessTypeData' => $businessTypeData,
+            'fundingSourceData' => $fundingSourceData,
         ]);
     }
 }
